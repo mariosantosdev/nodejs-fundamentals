@@ -1,39 +1,18 @@
 import http from "node:http";
-import { randomUUID } from "node:crypto";
-import { bodyParser } from "./middlewares/body-parser.js";
-import { Database } from "./db.js";
 
-const database = new Database();
+import { bodyParser } from "./middlewares/body-parser.js";
+import { routes } from "./routes.js";
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
 
   await bodyParser(req, res);
 
-  if (method === "POST" && url === "/users") {
-    const { name, email } = req.body;
-    const user = {
-      id: randomUUID(),
-      name: name,
-      email: email,
-    };
+  const route = routes.find(
+    (route) => route.method === method && route.url === url
+  );
 
-    database.insert("users", user);
-
-    return res.writeHead(201).end();
-  }
-
-  if (method === "GET" && url === "/users") {
-    const users = database.select("users");
-
-    return (
-      res
-        // Set response header as JSON
-        .setHeader("Content-Type", "application/json")
-        // Return users array as JSON
-        .end(JSON.stringify(users))
-    );
-  }
+  if (route) return route.handler(req, res);
 
   return res.writeHead(404).end();
 });
