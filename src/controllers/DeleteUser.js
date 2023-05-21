@@ -1,8 +1,4 @@
-import { Database } from "../db.js";
-
-const database = new Database();
-
-export function DeleteUser(req, res) {
+export function DeleteUser(req, res, database) {
   const { id } = req.params;
 
   database.delete("users", id);

@@ -1,4 +1,4 @@
-export async function bodyParser(req, res) {
+export async function bodyParser(req, res, database) {
   const buffers = [];
 
   for await (const chunk of req) {

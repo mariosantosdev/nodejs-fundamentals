@@ -1,8 +1,4 @@
-import { Database } from "../db.js";
-
-const database = new Database();
-
-export function GetUsers(req, res) {
+export function GetUsers(req, res, database) {
   const { search } = req.query;
   const users = database.select(
     "users",

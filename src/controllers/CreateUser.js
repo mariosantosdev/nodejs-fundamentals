@@ -1,10 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { Database } from "../db.js";
-
-const database = new Database();
-
-export function CreateUser(req, res) {
+export function CreateUser(req, res, database) {
   const { name, email } = req.body;
   const user = {
     id: randomUUID(),

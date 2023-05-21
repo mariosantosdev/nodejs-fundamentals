@@ -1,8 +1,4 @@
-import { Database } from "../db.js";
-
-const database = new Database();
-
-export function UpdateUser(req, res) {
+export function UpdateUser(req, res, database) {
   const { id } = req.params;
   const { name, email } = req.body;
 
