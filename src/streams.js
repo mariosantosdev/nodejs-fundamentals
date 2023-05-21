@@ -1,4 +1,4 @@
-import { Readable, Writable } from "node:stream";
+import { Readable, Writable, Transform } from "node:stream";
 
 class OneToHundredStream extends Readable {
   #index = 1;
@@ -22,6 +22,17 @@ class OneToHundredStream extends Readable {
   }
 }
 
+class ConvertToNegativeStream extends Transform {
+  // _transform() is a method that must be implemented by any class that extends Transform
+  _transform(chunk, encoding, callback) {
+    const data = chunk.toString();
+    const negative = Number(data) * -1;
+
+    // We call the callback function with the transformed data
+    callback(null, Buffer.from(negative.toString()));
+  }
+}
+
 class MultiplyByTenStream extends Writable {
   // _write() is a method that must be implemented by any class that extends Writable
   _write(chunk, encoding, callback) {
@@ -32,4 +43,6 @@ class MultiplyByTenStream extends Writable {
 }
 
 // We create a new instance of our class and pipe it to the standard output
-new OneToHundredStream().pipe(new MultiplyByTenStream());
+new OneToHundredStream()
+  .pipe(new ConvertToNegativeStream())
+  .pipe(new MultiplyByTenStream());
