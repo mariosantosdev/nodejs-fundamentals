@@ -1,4 +1,5 @@
 import { CreateUser } from "./controllers/CreateUser.js";
+import { DeleteUser } from "./controllers/DeleteUser.js";
 import { GetUsers } from "./controllers/GetUsers.js";
 import { buildRoutePath } from "./utils/build-route-path.js";
 
@@ -16,8 +17,6 @@ export const routes = [
   {
     method: "DELETE",
     url: buildRoutePath("/users/:id"),
-    handler: (req, res) => {
-      res.end();
-    },
+    handler: DeleteUser,
   },
 ];
