@@ -1,7 +1,8 @@
 import http from "node:http";
 import { bodyParser } from "./middlewares/body-parser.js";
+import { Database } from "./db.js";
 
-const users = [];
+const database = new Database();
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
@@ -10,15 +11,20 @@ const server = http.createServer(async (req, res) => {
 
   if (method === "POST" && url === "/users") {
     const { name, email } = req.body;
-    users.push({
-      id: users.length + 1,
+    const user = {
+      id: 1,
       name: name,
       email: email,
-    });
+    };
+
+    database.insert("users", user);
+
     return res.writeHead(201).end();
   }
 
   if (method === "GET" && url === "/users") {
+    const users = database.select("users");
+
     return (
       res
         // Set response header as JSON
