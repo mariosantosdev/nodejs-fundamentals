@@ -15,7 +15,13 @@ const server = http.createServer((req, res) => {
   }
 
   if (method === "GET" && url === "/users") {
-    return res.end(JSON.stringify(users));
+    return (
+      res
+        // Set response header as JSON
+        .setHeader("Content-Type", "application/json")
+        // Return users array as JSON
+        .end(JSON.stringify(users))
+    );
   }
 
   return res.end("Hello Ignite");
