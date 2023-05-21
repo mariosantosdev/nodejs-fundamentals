@@ -1,4 +1,5 @@
 import http from "node:http";
+import { randomUUID } from "node:crypto";
 import { bodyParser } from "./middlewares/body-parser.js";
 import { Database } from "./db.js";
 
@@ -12,7 +13,7 @@ const server = http.createServer(async (req, res) => {
   if (method === "POST" && url === "/users") {
     const { name, email } = req.body;
     const user = {
-      id: 1,
+      id: randomUUID(),
       name: name,
       email: email,
     };
