@@ -2,8 +2,17 @@ import { Database } from "../db.js";
 
 const database = new Database();
 
-export function GetUsers(_req, res) {
-  const users = database.select("users");
+export function GetUsers(req, res) {
+  const { search } = req.query;
+  const users = database.select(
+    "users",
+    search
+      ? {
+          name: search,
+          email: search,
+        }
+      : null
+  );
 
   return (
     res
