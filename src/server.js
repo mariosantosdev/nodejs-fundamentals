@@ -1,21 +1,12 @@
 import http from "node:http";
+import { bodyParser } from "./middlewares/body-parser.js";
 
 const users = [];
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
 
-  const buffers = [];
-
-  for await (const chunk of req) {
-    buffers.push(chunk);
-  }
-
-  try {
-    req.body = JSON.parse(Buffer.concat(buffers).toString());
-  } catch (error) {
-    req.body = null;
-  }
+  await bodyParser(req, res);
 
   if (method === "POST" && url === "/users") {
     const { name, email } = req.body;
