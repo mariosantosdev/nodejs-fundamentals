@@ -9,10 +9,15 @@ const server = http.createServer(async (req, res) => {
   await bodyParser(req, res);
 
   const route = routes.find(
-    (route) => route.method === method && route.url === url
+    (route) => route.method === method && route.url.test(url)
   );
 
-  if (route) return route.handler(req, res);
+  if (route) {
+    const routeParams = req.url.match(route.url);
+    req.params = { ...routeParams.groups };
+
+    return route.handler(req, res);
+  }
 
   return res.writeHead(404).end();
 });
